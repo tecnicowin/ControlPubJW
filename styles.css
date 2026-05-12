@@ -488,22 +488,165 @@ tr:last-child td {
 
 .pdf-header h1 { color: #000; }
 
-/* Responsive adjustments */
+/* Responsive Design Updates */
 @media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    /* Sidebar becomes Bottom Nav */
     .sidebar {
-        width: 80px;
+        width: 100%;
+        height: 70px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        flex-direction: row;
+        z-index: 1000;
+        border-right: none;
+        border-top: 1px solid var(--glass-border);
+        background: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(10px);
     }
-    .sidebar h1, .nav-item span {
-        display: none;
-    }
+
     .sidebar-header {
-        padding: 1rem;
+        display: none; /* Hide logo on mobile bottom nav */
+    }
+
+    .nav-menu {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-item {
+        flex-direction: column;
+        gap: 4px;
+        padding: 0.5rem;
+        margin: 0;
+        font-size: 0.7rem;
+        border-radius: 0;
+        flex: 1;
         justify-content: center;
     }
+
+    .nav-item i {
+        font-size: 1.2rem;
+    }
+
+    .nav-item.active {
+        background: transparent;
+        color: var(--accent-blue);
+        box-shadow: none;
+    }
+
+    .nav-item.active::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        width: 30%;
+        height: 3px;
+        background: var(--accent-blue);
+        border-radius: 0 0 4px 4px;
+    }
+
+    .logout-item {
+        display: none; /* Move close button somewhere else or hide on mobile bottom nav */
+    }
+
+    /* Main Content Adjustments */
     .main-content {
         padding: 1rem;
+        padding-bottom: 80px; /* Space for bottom nav */
     }
-    .form-row {
+
+    .welcome-card {
+        padding: 1.5rem;
+    }
+
+    .welcome-card h2 {
+        font-size: 1.8rem;
+    }
+
+    .stats-grid {
         grid-template-columns: 1fr;
+    }
+
+    .glass-card {
+        padding: 1.2rem;
+        border-radius: 20px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr; /* Stack inputs */
+    }
+
+    .form-group.small {
+        width: 100%;
+    }
+
+    /* Tables to Card-like on mobile */
+    .table-container {
+        border-radius: 12px;
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 600px; /* Ensure columns have space to breathe */
+    }
+
+    th, td {
+        padding: 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .top-bar {
+        margin-bottom: 1rem;
+    }
+
+    /* Consultas Tab adjustments */
+    .card-header-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-buttons {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 1rem;
+    }
+
+    .tab-group {
+        width: 100%;
+    }
+
+    .btn-tab {
+        flex: 1;
+        text-align: center;
+        padding: 0.6rem 0.5rem;
+    }
+
+    .btn-pdf {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+    
+    .sync-actions {
+        flex-direction: column;
+    }
+    
+    .sync-actions button {
+        width: 100%;
+    }
+}
+
+/* Modal Responsive */
+@media (max-width: 480px) {
+    .modal-content {
+        width: 95%;
+        padding: 1rem;
     }
 }
