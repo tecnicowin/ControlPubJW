@@ -95,9 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (p.especialCant > 0) items.push(`${p.especialPub} (${p.especialCant})`);
 
             row.innerHTML = `
-                <td><strong>${p.nombre}</strong></td>
-                <td>${items.join(' / ')}</td>
-                <td>
+                <td data-label="Solicitante"><strong>${p.nombre}</strong></td>
+                <td data-label="Pedido">${items.join(' / ')}</td>
+                <td data-label="Acción">
                     <button class="btn-action btn-deliver" title="Confirmar Entrega" onclick="confirmarEntrega(${p.id})">
                         <i class="fas fa-check"></i>
                     </button>
@@ -155,13 +155,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const fechaAMostrar = consultaEstado === 'pendiente' ? p.fechaSolicitud : (p.fechaEntrega || '-');
             
             row.innerHTML = `
-                <td>${fechaAMostrar}</td>
-                <td>${p.nombre}</td>
-                <td>${p.regularPub || '-'}</td>
-                <td>${p.regularCant || 0}</td>
-                <td>${p.especialPub || '-'}</td>
-                <td>${p.especialCant || 0}</td>
-                <td class="no-print">
+                <td data-label="Fecha">${fechaAMostrar}</td>
+                <td data-label="Solicitante">${p.nombre}</td>
+                <td data-label="Pub. Regular">${p.regularPub || '-'}</td>
+                <td data-label="Cant.">${p.regularCant || 0}</td>
+                <td data-label="Pub. Especial">${p.especialPub || '-'}</td>
+                <td data-label="Cant.">${p.especialCant || 0}</td>
+                <td class="no-print" data-label="Acciones">
                     ${consultaEstado === 'pendiente' ? `
                         <button class="btn-action btn-edit" onclick="abrirEditar(${p.id})">
                             <i class="fas fa-pen"></i>

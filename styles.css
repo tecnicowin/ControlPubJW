@@ -590,16 +590,64 @@ tr:last-child td {
     /* Tables to Card-like on mobile */
     .table-container {
         border-radius: 12px;
-        overflow-x: auto;
+        overflow-x: visible; /* No need for horizontal scroll with cards */
     }
 
-    table {
-        min-width: 600px; /* Ensure columns have space to breathe */
+    table, thead, tbody, th, td, tr {
+        display: block;
     }
 
-    th, td {
-        padding: 0.8rem;
-        font-size: 0.85rem;
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    td {
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        position: relative;
+        padding-left: 50% !important;
+        text-align: right;
+        min-height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    td:last-child {
+        border-bottom: none;
+        justify-content: center;
+        padding-left: 0 !important;
+        margin-top: 10px;
+    }
+
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 1rem;
+        width: 45%;
+        text-align: left;
+        font-weight: 600;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+    }
+
+    /* Reset some button styles for mobile cards */
+    .btn-action {
+        width: 44px; /* Larger touch target */
+        height: 44px;
+        margin: 0 5px;
     }
 
     .top-bar {
