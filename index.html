@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Publicaciones | Gestión Premium</title>
+    <meta name="description" content="Sistema profesional para el control de pedidos y entregas del Departamento de Publicaciones.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Menu -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-book-open logo-icon"></i>
+                <h1>Publicaciones</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-section="section-home">
+                    <i class="fas fa-home"></i> <span>Inicio</span>
+                </li>
+                <li class="nav-item" data-section="section-ingresar">
+                    <i class="fas fa-plus-circle"></i> <span>Ingresar Pedido</span>
+                </li>
+                <li class="nav-item" data-section="section-entrega">
+                    <i class="fas fa-truck-loading"></i> <span>Entrega de Pedido</span>
+                </li>
+                <li class="nav-item" data-section="section-consultas">
+                    <i class="fas fa-search"></i> <span>Consultas</span>
+                </li>
+                <li class="nav-item logout-item" id="btn-cerrar">
+                    <i class="fas fa-sign-out-alt"></i> <span>Cerrar</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-bar">
+                <div class="user-info">
+                    <span id="current-date"></span>
+                </div>
+                <div class="status-indicator">
+                    <span class="dot"></span> Online
+                </div>
+            </header>
+
+            <!-- Sections -->
+            <div id="section-home" class="app-section active">
+                <div class="welcome-card">
+                    <h2>Bienvenido al Sistema de Control</h2>
+                    <p>Gestione eficientemente los pedidos y entregas de publicaciones.</p>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-clock"></i>
+                            <div class="stat-info">
+                                <h3 id="stat-pendientes">0</h3>
+                                <p>Pendientes</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="stat-info">
+                                <h3 id="stat-entregados">0</h3>
+                                <p>Entregados Hoy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-header">
+                        <i class="fas fa-sync-alt"></i>
+                        <h2>Sincronización y Respaldo</h2>
+                    </div>
+                    <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Exporte sus datos para enviarlos a otro dispositivo o importe una copia de seguridad existente.</p>
+                    <div class="sync-actions">
+                        <button id="btn-export" class="btn-secondary">
+                            <i class="fas fa-file-export"></i> Exportar Datos
+                        </button>
+                        <button id="btn-import" class="btn-secondary">
+                            <i class="fas fa-file-import"></i> Importar Datos
+                        </button>
+                        <input type="file" id="file-input" style="display: none;" accept=".json">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section: Ingresar Pedido -->
+            <div id="section-ingresar" class="app-section">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <i class="fas fa-edit"></i>
+                        <h2>Registrar Nuevo Pedido</h2>
+                    </div>
+                    <form id="form-pedido" class="modern-form">
+                        <div class="form-group full-width">
+                            <label for="nombre">Nombre y Apellidos</label>
+                            <input type="text" id="nombre" placeholder="Ej. Juan Pérez" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="regular-pub">Publicación Regular</label>
+                                <select id="regular-pub">
+                                    <option value="">Ninguna</option>
+                                    <option value="Biblia Regular">Biblia Regular</option>
+                                    <option value="Biblia Letras Grandes">Biblia Letras Grandes</option>
+                                    <option value="Atalaya Estudio Español">Atalaya Estudio Español</option>
+                                    <option value="Atalaya Estudio Letras Grandes">Atalaya Estudio Letras Grandes</option>
+                                    <option value="Atalaya Ingles">Atalaya Ingles</option>
+                                </select>
+                            </div>
+                            <div class="form-group small">
+                                <label for="regular-cant">Cantidad</label>
+                                <input type="number" id="regular-cant" min="0" value="0">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="especial-pub">Publicación Especial</label>
+                                <input type="text" id="especial-pub" placeholder="Escriba el nombre..." list="especiales-list">
+                                <datalist id="especiales-list">
+                                    <!-- Options will be loaded dynamically -->
+                                </datalist>
+                            </div>
+                            <div class="form-group small">
+                                <label for="especial-cant">Cantidad</label>
+                                <input type="number" id="especial-cant" min="0" value="0">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save"></i> Guardar Pedido
+                            </button>
+                            <button type="reset" class="btn-secondary">
+                                <i class="fas fa-undo"></i> Limpiar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Section: Entrega de Pedido -->
+            <div id="section-entrega" class="app-section">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <i class="fas fa-search"></i>
+                        <h2>Gestionar Entregas</h2>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" id="search-entrega" placeholder="Buscar por nombre...">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <div class="table-container">
+                        <table id="table-entrega">
+                            <thead>
+                                <tr>
+                                    <th>Solicitante</th>
+                                    <th>Pedido Pendiente</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-entrega">
+                                <!-- Dynamic content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section: Consultas -->
+            <div id="section-consultas" class="app-section">
+                <div class="glass-card full-card">
+                    <div class="card-header-actions">
+                        <div class="header-title">
+                            <i class="fas fa-list-alt"></i>
+                            <h2 id="consulta-title">Pedidos Pendientes</h2>
+                        </div>
+                        <div class="header-buttons">
+                            <div class="tab-group">
+                                <button id="tab-pendientes" class="btn-tab active">Pendientes</button>
+                                <button id="tab-entregados" class="btn-tab">Entregados</button>
+                            </div>
+                            <button id="btn-pdf" class="btn-pdf">
+                                <i class="fas fa-file-pdf"></i> Exportar PDF
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="print-area" class="table-container">
+                        <table id="table-consultas">
+                            <thead>
+                                <tr>
+                                    <th id="th-fecha-rel">Fecha Solicitud</th>
+                                    <th>Solicitante</th>
+                                    <th>Pub. Regular</th>
+                                    <th>Cant.</th>
+                                    <th>Pub. Especial</th>
+                                    <th>Cant.</th>
+                                    <th id="th-acciones" class="no-print">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-consultas">
+                                <!-- Dynamic content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="modal-edit" class="modal">
+        <div class="modal-content glass-card">
+            <span class="close-modal">&times;</span>
+            <h3>Editar Pedido</h3>
+            <form id="form-edit" class="modern-form">
+                <input type="hidden" id="edit-id">
+                <div class="form-group">
+                    <label for="edit-nombre">Nombre y Apellidos</label>
+                    <input type="text" id="edit-nombre" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-regular-pub">Pub. Regular</label>
+                        <select id="edit-regular-pub">
+                            <option value="">Ninguna</option>
+                            <option value="Biblia Regular">Biblia Regular</option>
+                            <option value="Biblia Letras Grandes">Biblia Letras Grandes</option>
+                            <option value="Atalaya Estudio Español">Atalaya Estudio Español</option>
+                            <option value="Atalaya Estudio Letras Grandes">Atalaya Estudio Letras Grandes</option>
+                            <option value="Atalaya Ingles">Atalaya Ingles</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-regular-cant">Cant.</label>
+                        <input type="number" id="edit-regular-cant" min="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-especial-pub">Pub. Especial</label>
+                        <input type="text" id="edit-especial-pub">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-especial-cant">Cant.</label>
+                        <input type="number" id="edit-especial-cant" min="0">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="db.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW Registered', reg))
+                    .catch(err => console.log('SW Failed', err));
+            });
+        }
+    </script>
+</body>
+</html>
